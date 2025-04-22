@@ -1,12 +1,11 @@
 'use client';
 
 import type { LngLat, YMapLocationRequest } from 'ymaps3';
-import { IPositionByIp } from '@/types';
 import { useMapReactify } from '@/hooks/useMapReactify';
 import { MapMarker } from './MapMarker';
 
-export const YandexMap = ({ userGeo }: { userGeo: IPositionByIp | null }) => {
-  const center: LngLat = userGeo ? [userGeo.lon, userGeo.lat] : [37.588144, 55.733842];
+export const YandexMap = () => {
+  const center: LngLat = [37.588144, 55.733842];
 
   const reactify = useMapReactify();
 
@@ -15,7 +14,7 @@ export const YandexMap = ({ userGeo }: { userGeo: IPositionByIp | null }) => {
 
   return (
     <YMap
-      location={reactify.useDefault<YMapLocationRequest>({ center, zoom: 12 })}
+      location={reactify.useDefault<YMapLocationRequest>({ center, zoom: 11 })}
       ref={x => {
         window.map = x;
       }}

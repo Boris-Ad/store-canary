@@ -1,22 +1,21 @@
 'use client';
 
-import React, { ChangeEvent, useState, useRef, useTransition, useEffect } from 'react';
+import React, { ChangeEvent, useState, useRef, useTransition } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { IPositionByIp } from '@/types';
 import { YandexMap } from './YandexMap';
 import { useMounted } from '@/hooks/useMounted';
 import { getCities, getDataFromYandexTrash } from '@/app/(face)/_data';
 import { Loader } from 'lucide-react';
 import { useOrder } from '@/hooks/useOrder';
 
-export const Delivery = ({ userGeo }: { userGeo: IPositionByIp | null }) => {
+export const Delivery = () => {
   const [isPending, startTransition] = useTransition();
   const timeOutRef = useRef<NodeJS.Timeout>(null);
   const [menuPosition, setMenuPosition] = useState<{ x: number; y: number; width: number; height: number }>({ x: 0, y: 0, width: 0, height: 0 });
   const [cities, setCities] = useState<{ name: string; long: number; lat: number }[]>([]);
   const [selected, setSelected] = useState('');
-  const { address, setAddress } = useOrder(state => state);
+  const { address } = useOrder(state => state);
 
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const city = event.target.value;
@@ -37,7 +36,7 @@ export const Delivery = ({ userGeo }: { userGeo: IPositionByIp | null }) => {
         const position = getDataFromYandexTrash(res);
         setCities(position);
       });
-    }, 700);
+    }, 500);
   };
 
   const onSelected = ({ name, long, lat }: { name: string; long: number; lat: number }) => {
@@ -54,21 +53,11 @@ export const Delivery = ({ userGeo }: { userGeo: IPositionByIp | null }) => {
     setCities([]);
   };
 
-  useEffect(() => {
-    if (userGeo) {
-      getCities(userGeo.city).then(res => setSelected(res?.response.GeoObjectCollection.featureMember[0].GeoObject.name || ''));
-    }
-
-    return () => {
-      setAddress(null);
-    };
-  }, [userGeo]);
-
   return (
     <>
       <div className="my-4 flex flex-col md:flex-row gap-3 ">
         <div className="w-full md:w-1/2 p-2 md:order-last flex-1 aspect-[3/2]">
-          <YandexMap userGeo={userGeo} />
+          <YandexMap />
         </div>
         <div className="w-full md:w-1/2 p-2 space-y-1 flex-1 relative">
           <h4 className="text-gray-400">Введите название города и выберите адрес на карте</h4>

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { env } from '@/services/env/client';
 import { IGeoResponse } from '@/types/geoResponse';
 import { Home, List, Heart, ShoppingCart } from 'lucide-react';
-import { IPositionByIp } from '@/types';
+
 
 const cityNameSchema = z.string().trim().min(2);
 
@@ -67,14 +67,16 @@ export const getGeocoderResponse = async (long: number, lat: number): Promise<IG
   return res.json();
 };
 
-export const getIp = async (): Promise<string | null> => {
-  const res = await fetch('https://api.ipify.org');
-  if (!res.ok) return null;
-  return res.text();
-};
+// От vercel неверный адрес по ip ????
 
-export const getPositionByIp = async (ip: string): Promise<IPositionByIp | null> => {
-  const res = await fetch('http://ip-api.com/json/' + ip);
-  if (!res.ok) return null;
-  return res.json();
-};
+// export const getIp = async (): Promise<string | null> => {
+//   const res = await fetch('https://api.ipify.org');
+//   if (!res.ok) return null;
+//   return res.text();
+// };
+
+// export const getPositionByIp = async (ip: string): Promise<IPositionByIp | null> => {
+//   const res = await fetch('http://ip-api.com/json/' + ip);
+//   if (!res.ok) return null;
+//   return res.json();
+// };
