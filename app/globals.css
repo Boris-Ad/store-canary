@@ -104,4 +104,11 @@
   .container {
     @apply mx-auto px-2 md:px-4;
   }
+
+  th {
+    @apply border-b border-gray-600 text-left pb-4 font-normal;
+  }
+  td {
+    @apply border-b border-gray-600;
+  }
 }

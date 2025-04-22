@@ -20,14 +20,15 @@ export const SelectDropMenu = ({
     createPortal(
       <AnimatePresence>
         {menuPosition && (
-          <div onClick={() => setMenu()} className="absolute inset-0 z-30">
+          <div onClick={() => setMenu()} className="absolute inset-0 z-50">
             <motion.div
+              layout
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               style={{ ...menuPosition, y: menuPosition.y + menuPosition.height + 3 }}
               onClick={e => e.stopPropagation()}
-              className="bg-slate-700 rounded-lg shadow-lg flex flex-col overflow-hidden z-50"
+              className="bg-slate-700 rounded-lg shadow-lg flex flex-col overflow-hidden"
             >
               {children}
             </motion.div>

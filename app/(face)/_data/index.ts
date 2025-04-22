@@ -1,4 +1,10 @@
+import { z } from 'zod';
+import { env } from '@/services/env/client';
+import { IGeoResponse } from '@/types/geoResponse';
 import { Home, List, Heart, ShoppingCart } from 'lucide-react';
+
+
+const cityNameSchema = z.string().trim().min(2)
 
 export const accordionProductData = [
   {
@@ -14,8 +20,50 @@ export const accordionProductData = [
 ];
 
 export const phoneLinks = [
-  {id:1,href:'/',title:'Главная',icon: Home},
-  {id:2,href:'/products',title:'Каталог',icon: List},
-  {id:3,href:'/products/likes',title:'Избранное',icon: Heart},
-  {id:4,href:'/products/cart',title:'Корзина',icon: ShoppingCart},
-]
+  { id: 1, href: '/', title: 'Главная', icon: Home },
+  { id: 2, href: '/products', title: 'Каталог', icon: List },
+  { id: 3, href: '/products/likes', title: 'Избранное', icon: Heart },
+  { id: 4, href: '/products/cart', title: 'Корзина', icon: ShoppingCart },
+];
+
+
+export const getCities = async (cityName: string): Promise<IGeoResponse | null> => {
+  const validatedCityName = cityNameSchema.safeParse(cityName);
+  if (validatedCityName.success === false) {
+    return null;
+  }
+  const city = validatedCityName.data;
+
+  const res = await fetch(`https://geocode-maps.yandex.ru/v1/?apikey=${env.NEXT_PUBLIC_YANDEX_MAP_API}&lang=ru_RU&geocode=${city}&results=3&format=json`);
+  if (!res.ok) return null;
+  return res.json();
+};
+
+export const getDataFromYandexTrash = ({ response }: IGeoResponse) => {
+  const geoPosition: { name: string; long: number; lat: number }[] = [];
+
+  for (const { GeoObject } of response.GeoObjectCollection.featureMember) {
+    if (GeoObject.metaDataProperty.GeocoderMetaData.Address.country_code !== 'RU') {
+      break;
+    }
+    const components = GeoObject.metaDataProperty.GeocoderMetaData.Address.Components;
+    const locality = components.find(item => item.kind === 'locality');
+    const [long, lat] = GeoObject.Point.pos.split(' ');
+    if (locality) {
+      const position = { name: locality.name, long: parseFloat(long) || 0, lat: parseFloat(lat) || 0 };
+      geoPosition.push(position);
+    }
+    const moscow = components.find(item => item.name === 'Москва');
+    if (moscow) {
+      const position = { name: moscow.name, long: parseFloat(long) || 0, lat: parseFloat(lat) || 0 };
+      geoPosition.push(position);
+    }
+  }
+  return geoPosition;
+};
+
+export const getGeocoderResponse = async (long: number, lat: number): Promise<IGeoResponse | null> => {
+  const res = await fetch(`https://geocode-maps.yandex.ru/v1/?apikey=${env.NEXT_PUBLIC_YANDEX_MAP_API}&geocode=${long},${lat}&results=1&format=json`);
+  if (!res.ok) return null;
+  return res.json();
+};

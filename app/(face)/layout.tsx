@@ -44,4 +44,3 @@ async function SuspendedPhoneMenuComponent() {
   const existLikes = user && (await getLikedProductsCount(user.id));
   return <PhoneMenu user={user} likesRegisteredUser={existLikes} />;
 }
-

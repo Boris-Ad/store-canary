@@ -53,15 +53,12 @@ export const HeroCategoriesSlider = ({ categories }: { categories: (typeof Categ
             dragElastic={0.05}
             dragListener={inx === (count + 1) % categoriesForSlider.length ? true : false}
             onDragEnd={onDragEnd}
-            initial={false}
             animate="animate"
             variants={variants}
             custom={inx}
-            className={clsx(
-              'w-[220px] md:w-[400px] aspect-[3/2] p-2 md:p-4 absolute -translate-x-1/2 -translate-y-1/2 flex flex-col shadow-lg',
-              item,
-              inx === (count + 1) % categoriesForSlider.length && 'group'
-            )}
+            className={clsx('w-[220px] md:w-[400px] aspect-[3/2] p-2 md:p-4 absolute -translate-x-1/2 -translate-y-1/2 flex flex-col shadow-lg', {
+              group: inx === (count + 1) % categoriesForSlider.length,
+            })}
           >
             <Image src={item.imageUrl} alt={item.name} fill sizes="300px" draggable={false} className="object-contain" />
             <div className="absolute inset-0 bg-black/30" />

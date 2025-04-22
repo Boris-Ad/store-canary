@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Montserrat, Roboto } from 'next/font/google';
 import './globals.css';
 import { Suspense } from 'react';
+import Script from 'next/script';
+import { env } from '@/services/env/server';
 
 const roboto = Roboto({
   variable: '--font-roboto',
@@ -29,7 +31,10 @@ export default function RootLayout({
   return (
     <Suspense>
       <html lang="en">
-        <body className={`${roboto.variable} ${montserrat.variable} antialiased`}>{children}</body>
+        <body className={`${roboto.variable} ${montserrat.variable} antialiased`}>
+          {children}
+          <Script src={'https://api-maps.yandex.ru/v3/?lang=ru_RU&apikey=' + env.YANDEX_MAP_API} strategy="beforeInteractive" />
+        </body>
       </html>
     </Suspense>
   );

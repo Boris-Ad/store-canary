@@ -2,6 +2,7 @@
 
 import { useCart } from '@/hooks/useCart';
 import { formatCurrency, numWord, productsPrice } from '@/lib/utils';
+import Link from 'next/link';
 
 export const ConfirmOrder = () => {
   const { products } = useCart(state => state);
@@ -24,7 +25,12 @@ export const ConfirmOrder = () => {
       <h2 className="text-xl">Итого:</h2>
       <h2 className="text-xl">{formatCurrency(sum)}</h2>
       <div className="pt-3">
-        <button className="w-full h-10 bg-face-primary rounded-full">Оформить заказ</button>
+        <Link
+          href={'/products/cart/order'}
+          className="w-full h-10 flex justify-center items-center bg-face-primary hover:bg-face-primary/70 active:bg-face-primary/80 rounded-full transition-colors"
+        >
+          Оформить заказ
+        </Link>
       </div>
     </div>
   );

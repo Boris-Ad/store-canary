@@ -15,7 +15,8 @@ export const BreadCrumbs = ({ dynamicProduct }: { dynamicProduct?: { id: string;
     const linkNames: { [key: string]: string } = {
       products: 'Каталог',
       cart: 'Корзина',
-      likes:'Избранное'
+      likes:'Избранное',
+      order:'Оформление заказа'
     };
 
     if (dynamicProduct) {
@@ -38,9 +39,9 @@ export const BreadCrumbs = ({ dynamicProduct }: { dynamicProduct?: { id: string;
   }
 
   return (
-    <div className="flex md:gap-1">
+    <div className="flex md:gap-1 overflow-hidden">
       {links.map((link, inx) => (
-        <Link href={link.href} key={link.title} className={clsx('flex items-center md:space-x-1 hover:underline', { 'text-slate-500': inx == links.length - 1 })}>
+        <Link href={link.href} key={link.title} className={clsx('flex items-center md:space-x-1 hover:underline text-nowrap', { 'text-slate-500': inx == links.length - 1 })}>
           <span className='text-sm md:text-base'>{link.title}</span>
           <ChevronRight size={18} className={clsx({ hidden: inx == links.length - 1 })} />
         </Link>
