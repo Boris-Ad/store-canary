@@ -2,9 +2,9 @@ import { z } from 'zod';
 import { env } from '@/services/env/client';
 import { IGeoResponse } from '@/types/geoResponse';
 import { Home, List, Heart, ShoppingCart } from 'lucide-react';
+import { IPositionByIp } from '@/types';
 
-
-const cityNameSchema = z.string().trim().min(2)
+const cityNameSchema = z.string().trim().min(2);
 
 export const accordionProductData = [
   {
@@ -25,7 +25,6 @@ export const phoneLinks = [
   { id: 3, href: '/products/likes', title: 'Избранное', icon: Heart },
   { id: 4, href: '/products/cart', title: 'Корзина', icon: ShoppingCart },
 ];
-
 
 export const getCities = async (cityName: string): Promise<IGeoResponse | null> => {
   const validatedCityName = cityNameSchema.safeParse(cityName);
@@ -64,6 +63,18 @@ export const getDataFromYandexTrash = ({ response }: IGeoResponse) => {
 
 export const getGeocoderResponse = async (long: number, lat: number): Promise<IGeoResponse | null> => {
   const res = await fetch(`https://geocode-maps.yandex.ru/v1/?apikey=${env.NEXT_PUBLIC_YANDEX_MAP_API}&geocode=${long},${lat}&results=1&format=json`);
+  if (!res.ok) return null;
+  return res.json();
+};
+
+export const getIp = async (): Promise<string | null> => {
+  const res = await fetch('https://api.ipify.org');
+  if (!res.ok) return null;
+  return res.text();
+};
+
+export const getPositionByIp = async (ip: string): Promise<IPositionByIp | null> => {
+  const res = await fetch('http://ip-api.com/json/' + ip);
   if (!res.ok) return null;
   return res.json();
 };

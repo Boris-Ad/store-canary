@@ -1,11 +1,12 @@
 import { PageTitle } from '@/app/(face)/_components/PageTitle';
 import { BreadCrumbs } from '@/components/BreadCrumbs';
 import { Suspense } from 'react';
-import { getIp, getPositionByIp } from '@/server/data';
+import { getIp, getPositionByIp } from '@/app/(face)/_data';
 import { ProductsList } from './_components/ProductsList';
 import { ItemTitle } from './_components/ItemTitle';
 import { ConfirmPurchase } from './_components/ConfirmPurchase';
 import { Delivery } from './_components/Delivery';
+
 
 const OrderPage = async () => {
   return (
